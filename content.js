@@ -19,15 +19,15 @@
     const SELECTION_BOX_STYLE = {
         width: '2px',
         style: 'dotted',
-        color: 'red',
-        background: '#ff00001A',
+        color: 'orange',
+        background: '#FFA5001A',
         borderRadius: '8px'
     };
     
     const LINK_BOX_STYLE = {
         width: '2px',
         style: 'dashed',
-        color: 'orange',
+        color: '#0061CA',
         background: 'transparent',
         borderRadius: '96px',
         textColor: 'inherit'

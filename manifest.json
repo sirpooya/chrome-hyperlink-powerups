@@ -4,18 +4,18 @@
   "version": "1.0",
   "description": "Forces all links to open in the same tab instead of new tab or windows",
   "icons": {
-    "16": "src/assets/icon16.png",
-    "48": "src/assets/icon48.png",
-    "128": "src/assets/icon128.png"
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
   },
   "permissions": [
     "activeTab",
     "storage"
   ],
   "background": {
-    "service_worker": "src/background/background.js"
+    "service_worker": "background/background.js"
   },
-  "options_page": "src/options/options.html",
+  "options_page": "options/options.html",
   "commands": {
     "toggle-extension": {
       "suggested_key": {
@@ -27,7 +27,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["src/content/content.js"],
+      "js": ["content/content.js"],
       "run_at": "document_end"
     }
   ]

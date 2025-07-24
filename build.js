@@ -8,22 +8,22 @@ if (!fs.existsSync('dist')) {
     fs.mkdirSync('dist');
 }
 
-// Files to copy to dist
+// Files to copy to dist with their destination paths
 const filesToCopy = [
-    'manifest.json',
-    'src/background/background.js',
-    'src/content/content.js',
-    'src/options/options.html',
-    'src/options/options.js',
-    'src/assets/icon16.png',
-    'src/assets/icon48.png',
-    'src/assets/icon128.png'
+    { src: 'manifest.json', dest: 'manifest.json' },
+    { src: 'src/background/background.js', dest: 'background/background.js' },
+    { src: 'src/content/content.js', dest: 'content/content.js' },
+    { src: 'src/options/options.html', dest: 'options/options.html' },
+    { src: 'src/options/options.js', dest: 'options/options.js' },
+    { src: 'src/assets/icon16.png', dest: 'assets/icon16.png' },
+    { src: 'src/assets/icon48.png', dest: 'assets/icon48.png' },
+    { src: 'src/assets/icon128.png', dest: 'assets/icon128.png' }
 ];
 
 // Copy files to dist directory
 filesToCopy.forEach(file => {
-    const sourcePath = file;
-    const destPath = path.join('dist', file);
+    const sourcePath = file.src;
+    const destPath = path.join('dist', file.dest);
     
     // Create directory structure if it doesn't exist
     const destDir = path.dirname(destPath);
@@ -33,18 +33,8 @@ filesToCopy.forEach(file => {
     
     // Copy file
     fs.copyFileSync(sourcePath, destPath);
-    console.log(`Copied: ${file} -> dist/${file}`);
+    console.log(`Copied: ${file.src} -> dist/${file.dest}`);
 });
-
-// Update manifest.json in dist to use relative paths
-const distManifestPath = path.join('dist', 'manifest.json');
-let manifestContent = fs.readFileSync(distManifestPath, 'utf8');
-
-// Remove src/ prefix from paths in dist manifest
-manifestContent = manifestContent.replace(/src\//g, '');
-
-fs.writeFileSync(distManifestPath, manifestContent);
-console.log('Updated manifest.json paths for distribution');
 
 console.log('\nBuild completed! Extension files are ready in the dist/ directory.');
 console.log('You can load the extension from the dist/ directory in Chrome.'); 

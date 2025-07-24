@@ -1,0 +1,7 @@
+.settings/
+.project
+.DS_Store
+.idea
+*.iml
+node_modules/
+*.zip

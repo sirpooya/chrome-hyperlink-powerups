@@ -10,12 +10,21 @@
   },
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "notifications"
   ],
   "background": {
     "service_worker": "background.js"
   },
   "options_page": "options.html",
+  "commands": {
+    "toggle-extension": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Z"
+      },
+      "description": "Toggle extension on/off"
+    }
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

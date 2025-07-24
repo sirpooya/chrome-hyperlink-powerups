@@ -48,7 +48,7 @@ function saveSettings(e) {
         if (chrome.runtime.lastError) {
             showStatus('Error saving settings: ' + chrome.runtime.lastError.message, 'error');
         } else {
-            showStatus('Settings saved successfully!', 'success');
+            showStatus('Settings saved successfully! You can now use ' + shortcutKey + ' for link selection.', 'success');
         }
     });
 }
@@ -59,8 +59,8 @@ function showStatus(message, type) {
     statusDiv.className = `status ${type}`;
     statusDiv.style.display = 'block';
     
-    // Hide status after 3 seconds
+    // Hide status after 4 seconds
     setTimeout(() => {
         statusDiv.style.display = 'none';
-    }, 3000);
+    }, 4000);
 } 

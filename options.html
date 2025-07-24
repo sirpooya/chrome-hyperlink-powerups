@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 auto;
             padding: 20px;
             line-height: 1.6;
@@ -80,6 +80,37 @@
             margin-bottom: 20px;
             border-left: 4px solid #4285f4;
         }
+        .shortcut-info {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+        }
+        .feature-section {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+        .feature-section h3 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        .usage-steps {
+            background-color: #fafafa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .usage-steps ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .usage-steps li {
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body>
@@ -87,15 +118,36 @@
         <h1>Tab Link Ops Settings</h1>
         
         <div class="info">
-            <strong>How it works:</strong> Press the shortcut key (default: Z) to toggle the extension on/off for the current page.
+            <strong>How it works:</strong> Press <strong>Ctrl+Shift+Z</strong> to toggle the extension on/off for the current page.
+        </div>
+
+        <div class="feature-section">
+            <h3>🚀 New Feature: Link Selection (LinkClump-style)</h3>
+            <p>Select and copy multiple links by dragging your mouse while holding a custom key!</p>
+            
+            <div class="usage-steps">
+                <strong>How to use:</strong>
+                <ol>
+                    <li>Set your custom shortcut key below (e.g., "Z")</li>
+                    <li>Hold down your custom key</li>
+                    <li>Click and drag to create a blue selection box</li>
+                    <li>Release to copy all links in the selected area to clipboard</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="shortcut-info">
+            <strong>Keyboard Shortcut:</strong> The default shortcut is <strong>Ctrl+Shift+Z</strong>. You can change this in Chrome's extension keyboard shortcuts settings:
+            <br><br>
+            <a href="chrome://extensions/shortcuts" target="_blank">Open Keyboard Shortcuts Settings</a>
         </div>
 
         <form id="settingsForm">
             <div class="form-group">
-                <label for="shortcutKey">Shortcut Key:</label>
+                <label for="shortcutKey">Custom Link Selection Key:</label>
                 <input type="text" id="shortcutKey" maxlength="1" placeholder="Z" autocomplete="off">
                 <p style="font-size: 12px; color: #666; margin-top: 5px;">
-                    Enter a single letter (A-Z) to use as your shortcut key
+                    Enter a single letter (A-Z) to use for link selection. Hold this key and drag to select multiple links.
                 </p>
             </div>
             

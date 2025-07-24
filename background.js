@@ -9,14 +9,35 @@ let isEnabled = {};
 // Initialize when extension loads
 chrome.runtime.onInstalled.addListener(() => {
     console.log('Tab Link Ops extension installed');
+    initializeCommands();
 });
 
-// Handle keyboard shortcuts
-chrome.commands.onCommand.addListener((command) => {
-    if (command === 'toggle-extension') {
-        toggleExtension();
-    }
-});
+// Function to initialize commands with retry logic
+function initializeCommands() {
+    // Wait a bit for the API to be available
+    setTimeout(() => {
+        try {
+            // Check if commands API exists and is properly loaded
+            if (typeof chrome !== 'undefined' && 
+                chrome.commands && 
+                typeof chrome.commands.onCommand !== 'undefined') {
+                
+                chrome.commands.onCommand.addListener((command) => {
+                    if (command === 'toggle-extension') {
+                        toggleExtension();
+                    }
+                });
+                console.log('Commands API initialized successfully');
+            } else {
+                console.log('Commands API not available, retrying...');
+                // Retry once more after a longer delay
+                setTimeout(initializeCommands, 1000);
+            }
+        } catch (error) {
+            console.log('Error initializing commands API:', error);
+        }
+    }, 100);
+}
 
 // Listen for messages from content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -38,6 +59,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const tabId = sender.tab.id;
         sendResponse({ enabled: isEnabled[tabId] || false });
     }
+    
+    if (request.action === 'showToast') {
+        // Show Chrome toast notification
+        chrome.notifications.create({
+            type: 'basic',
+            iconUrl: 'icon48.png',
+            title: 'Tab Link Ops',
+            message: request.message
+        });
+    }
 });
 
 // Toggle extension for current active tab
@@ -51,18 +82,12 @@ function toggleExtension() {
             chrome.tabs.sendMessage(tabId, {
                 action: 'toggleExtension',
                 enabled: isEnabled[tabId]
+            }).catch(() => {
+                // Content script might not be loaded yet, that's okay
+                console.log('Content script not ready yet');
             });
             
-            // Show notification
-            const status = isEnabled[tabId] ? 'enabled' : 'disabled';
-            chrome.action.setBadgeText({
-                text: isEnabled[tabId] ? 'ON' : 'OFF',
-                tabId: tabId
-            });
-            chrome.action.setBadgeBackgroundColor({
-                color: isEnabled[tabId] ? '#4CAF50' : '#F44336',
-                tabId: tabId
-            });
+            console.log('Extension toggled:', isEnabled[tabId] ? 'ON' : 'OFF');
         }
     });
 }
@@ -72,14 +97,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === 'complete') {
         // Reset enabled state for new page
         isEnabled[tabId] = false;
-        chrome.action.setBadgeText({
-            text: 'OFF',
-            tabId: tabId
-        });
-        chrome.action.setBadgeBackgroundColor({
-            color: '#F44336',
-            tabId: tabId
-        });
+        console.log('New page loaded, extension disabled');
     }
 });
 

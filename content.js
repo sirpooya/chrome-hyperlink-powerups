@@ -12,23 +12,29 @@
     let selectionBox = null;
     let selectedLinks = [];
     let linkBoxes = new Map(); // Store link selection boxes
+    let originalLinkColors = new Map(); // Store original link colors
     const Z_INDEX = 2147483647;
     
     // Styling variables
     const SELECTION_BOX_STYLE = {
         width: '2px',
         style: 'dotted',
-        color: '#5357F6'
+        color: 'red',
+        background: '#ff00001A',
+        borderRadius: '8px'
     };
     
     const LINK_BOX_STYLE = {
         width: '2px',
         style: 'dashed',
-        color: '#00ff00'
+        color: 'orange',
+        background: 'transparent',
+        borderRadius: '96px',
+        textColor: 'inherit'
     };
     
     const TOAST_STYLE = {
-        background: '#000000',
+        background: 'black',
         color: 'white',
         padding: '10px 20px',
         borderRadius: '5px',
@@ -131,6 +137,8 @@
         selectionBox.style.cssText = `
             margin: 0px auto;
             border: ${SELECTION_BOX_STYLE.width} ${SELECTION_BOX_STYLE.style} ${SELECTION_BOX_STYLE.color};
+            background: ${SELECTION_BOX_STYLE.background};
+            border-radius: ${SELECTION_BOX_STYLE.borderRadius};
             position: absolute;
             z-index: ${Z_INDEX};
             visibility: hidden;
@@ -192,6 +200,8 @@
         linkBox.style.cssText = `
             margin: 0px auto;
             border: ${LINK_BOX_STYLE.width} ${LINK_BOX_STYLE.style} ${LINK_BOX_STYLE.color};
+            background: ${LINK_BOX_STYLE.background};
+            color: ${LINK_BOX_STYLE.textColor};
             position: absolute;
             width: ${width}px;
             height: ${height}px;
@@ -274,16 +284,38 @@
                 if (pos.x < x2 && pos.x + width > x1 && pos.y < y2 && pos.y + height > y1) {
                     selectedLinksSet.add(href);
                     
-                    // Show link selection box
-                    if (!linkBoxes.has(link)) {
-                        const linkBox = createLinkBox(link);
-                        linkBoxes.set(link, linkBox);
+                                    // Show link selection box and change link color
+                if (!linkBoxes.has(link)) {
+                    const linkBox = createLinkBox(link);
+                    linkBoxes.set(link, linkBox);
+                    // Store original color if not already stored
+                    if (!originalLinkColors.has(link)) {
+                        originalLinkColors.set(link, link.style.color || '');
                     }
-                    linkBoxes.get(link).style.visibility = 'visible';
+                }
+                linkBoxes.get(link).style.visibility = 'visible';
+                
+                // Change the link's text color (only if not inherit)
+                if (LINK_BOX_STYLE.textColor !== 'inherit') {
+                    link.style.color = LINK_BOX_STYLE.textColor;
+                }
+                
+                // Apply border-radius to link box (inherit from link or use specified value)
+                const linkBox = linkBoxes.get(link);
+                if (LINK_BOX_STYLE.borderRadius === 'inherit') {
+                    const computedStyle = window.getComputedStyle(link);
+                    linkBox.style.borderRadius = computedStyle.borderRadius;
                 } else {
-                    // Hide link selection box
+                    linkBox.style.borderRadius = LINK_BOX_STYLE.borderRadius;
+                }
+                } else {
+                    // Hide link selection box and restore original color
                     if (linkBoxes.has(link)) {
                         linkBoxes.get(link).style.visibility = 'hidden';
+                    }
+                    // Restore original link color
+                    if (originalLinkColors.has(link)) {
+                        link.style.color = originalLinkColors.get(link);
                     }
                 }
             }
@@ -332,6 +364,14 @@
             }
         });
         linkBoxes.clear();
+        
+        // Restore all original link colors
+        originalLinkColors.forEach((originalColor, link) => {
+            if (link && link.style) {
+                link.style.color = originalColor;
+            }
+        });
+        originalLinkColors.clear();
     }
 
     // Function to prevent event escalation
@@ -472,7 +512,7 @@
             color: ${TOAST_STYLE.color};
             padding: ${TOAST_STYLE.padding};
             border-radius: ${TOAST_STYLE.borderRadius};
-            z-index: 10001;
+            z-index: 99999999999;
             font-family: Arial, sans-serif;
             font-size: ${TOAST_STYLE.fontSize};
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);

@@ -8,7 +8,7 @@ let isEnabled = {};
 
 // Initialize when extension loads
 chrome.runtime.onInstalled.addListener(() => {
-    console.log('Tab Link Ops extension installed');
+    console.log('Hyperlink Powerups extension installed');
     initializeCommands();
 });
 
@@ -58,16 +58,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'isEnabled') {
         const tabId = sender.tab.id;
         sendResponse({ enabled: isEnabled[tabId] || false });
-    }
-    
-    if (request.action === 'showToast') {
-        // Show Chrome toast notification
-        chrome.notifications.create({
-            type: 'basic',
-            iconUrl: 'icon48.png',
-            title: 'Tab Link Ops',
-            message: request.message
-        });
     }
 });
 

@@ -1,3 +1,5 @@
+// Same Tab Link Opener - Content Script
+// Forces all links to open in the same tab instead of new windows/tabs
 
 (function() {
     'use strict';
@@ -314,22 +316,14 @@
     // Function to copy links to clipboard
     function copyLinksToClipboard(links) {
         if (links.length === 0) {
-            // Show Chrome toast for no links found
-            chrome.runtime.sendMessage({
-                action: 'showToast',
-                message: 'No links found in selection'
-            });
+            showNotification('No links found in selection', 'error');
             return;
         }
         
         const linkList = links.map(link => link.url).join('\n');
         
         navigator.clipboard.writeText(linkList).then(() => {
-            // Show Chrome toast for success
-            chrome.runtime.sendMessage({
-                action: 'showToast',
-                message: `Copied ${links.length} links to clipboard!`
-            });
+            showNotification(`Copied ${links.length} links to clipboard!`, 'success');
         }).catch(() => {
             // Fallback for older browsers
             const textArea = document.createElement('textarea');
@@ -341,11 +335,7 @@
             document.execCommand('copy');
             document.body.removeChild(textArea);
             
-            // Show Chrome toast for success
-            chrome.runtime.sendMessage({
-                action: 'showToast',
-                message: `Copied ${links.length} links to clipboard!`
-            });
+            showNotification(`Copied ${links.length} links to clipboard!`, 'success');
         });
     }
 
@@ -510,6 +500,8 @@
             font-family: Arial, sans-serif;
             font-size: 14px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            max-width: 300px;
+            word-wrap: break-word;
         `;
         
         document.body.appendChild(notification);
@@ -577,5 +569,5 @@
         }
     });
 
-    console.log('Same Tab Link Ops: Extension loaded (disabled by default)');
+    console.log('Hyperlink Powerups: Extension loaded (disabled by default)');
 })(); 

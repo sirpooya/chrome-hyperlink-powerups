@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Tab Link Ops",
+  "name": "Hyperlink Powerups",
   "version": "1.0",
   "description": "Forces all links to open in the same tab instead of new tab or windows",
   "icons": {
@@ -10,8 +10,7 @@
   },
   "permissions": [
     "activeTab",
-    "storage",
-    "notifications"
+    "storage"
   ],
   "background": {
     "service_worker": "background.js"

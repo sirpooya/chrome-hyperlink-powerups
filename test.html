@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Same Tab Link Opener - Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .status {
+            background-color: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Same Tab Link Opener - Test Page</h1>
+    
+    <div class="status">
+        <strong>Extension Status:</strong> 
+        <span id="status">Checking...</span>
+    </div>
+
+    <div class="test-section">
+        <h3>Test 1: Basic Links with target="_blank"</h3>
+        <p>These links normally open in new tabs:</p>
+        <ul>
+            <li><a href="https://www.google.com" target="_blank">Google (target="_blank")</a></li>
+            <li><a href="https://www.github.com" target="_blank">GitHub (target="_blank")</a></li>
+            <li><a href="https://www.stackoverflow.com" target="_blank">Stack Overflow (target="_blank")</a></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h3>Test 2: Links with target="_new"</h3>
+        <p>These links normally open in new windows:</p>
+        <ul>
+            <li><a href="https://www.wikipedia.org" target="_new">Wikipedia (target="_new")</a></li>
+            <li><a href="https://www.reddit.com" target="_new">Reddit (target="_new")</a></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h3>Test 3: JavaScript Links</h3>
+        <p>These links use JavaScript to open new windows:</p>
+        <ul>
+            <li><a href="#" onclick="window.open('https://www.youtube.com', '_blank')">YouTube (JavaScript window.open)</a></li>
+            <li><a href="#" onclick="window.open('https://www.twitter.com', '_new')">Twitter (JavaScript window.open)</a></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h3>Test 4: Normal Links (Control)</h3>
+        <p>These links should work normally (open in same tab):</p>
+        <ul>
+            <li><a href="https://www.example.com">Example.com (normal link)</a></li>
+            <li><a href="https://www.httpbin.org">HTTPBin (normal link)</a></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h3>Test 5: Dynamically Added Links</h3>
+        <p>Click the button to add a new link with target="_blank":</p>
+        <button onclick="addDynamicLink()">Add Dynamic Link</button>
+        <div id="dynamic-links"></div>
+    </div>
+
+    <script>
+        // Check if extension is loaded
+        setTimeout(() => {
+            const status = document.getElementById('status');
+            if (window.location.href.includes('chrome-extension://')) {
+                status.textContent = 'Extension detected!';
+                status.style.color = 'green';
+            } else {
+                status.textContent = 'Extension not detected. Make sure it\'s installed and enabled.';
+                status.style.color = 'red';
+            }
+        }, 1000);
+
+        // Function to add dynamic links
+        function addDynamicLink() {
+            const container = document.getElementById('dynamic-links');
+            const link = document.createElement('a');
+            link.href = 'https://www.example.org';
+            link.target = '_blank';
+            link.textContent = 'Dynamically added link (target="_blank")';
+            link.style.display = 'block';
+            link.style.margin = '10px 0';
+            
+            container.appendChild(link);
+        }
+
+        // Add some dynamic content after page load
+        setTimeout(() => {
+            const container = document.getElementById('dynamic-links');
+            const link = document.createElement('a');
+            link.href = 'https://www.example.net';
+            link.target = '_blank';
+            link.textContent = 'Auto-added link (target="_blank")';
+            link.style.display = 'block';
+            link.style.margin = '10px 0';
+            
+            container.appendChild(link);
+        }, 2000);
+    </script>
+</body>
+</html> 

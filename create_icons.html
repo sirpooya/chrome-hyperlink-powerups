@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Extension Icons</title>
+</head>
+<body>
+    <h1>Extension Icon Generator</h1>
+    <p>This page will generate basic placeholder icons for the Chrome extension.</p>
+    <p>Right-click on each canvas and "Save image as" to save the icons.</p>
+    
+    <h2>16x16 Icon</h2>
+    <canvas id="icon16" width="16" height="16"></canvas>
+    
+    <h2>48x48 Icon</h2>
+    <canvas id="icon48" width="48" height="48"></canvas>
+    
+    <h2>128x128 Icon</h2>
+    <canvas id="icon128" width="128" height="128"></canvas>
+
+    <script>
+        function drawIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Background
+            ctx.fillStyle = '#4285f4';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Draw a simple tab icon
+            ctx.fillStyle = 'white';
+            ctx.fillRect(size * 0.2, size * 0.3, size * 0.6, size * 0.4);
+            
+            // Draw a link symbol
+            ctx.strokeStyle = '#4285f4';
+            ctx.lineWidth = size * 0.08;
+            ctx.beginPath();
+            ctx.moveTo(size * 0.3, size * 0.6);
+            ctx.lineTo(size * 0.7, size * 0.6);
+            ctx.stroke();
+            
+            // Draw arrow pointing right
+            ctx.beginPath();
+            ctx.moveTo(size * 0.65, size * 0.55);
+            ctx.lineTo(size * 0.75, size * 0.6);
+            ctx.lineTo(size * 0.65, size * 0.65);
+            ctx.stroke();
+        }
+        
+        // Generate all icons
+        drawIcon('icon16', 16);
+        drawIcon('icon48', 48);
+        drawIcon('icon128', 128);
+    </script>
+</body>
+</html> 

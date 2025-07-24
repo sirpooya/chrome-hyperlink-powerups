@@ -1,8 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "Same Tab Link Opener",
+  "name": "Tab Link Ops",
   "version": "1.0",
-  "description": "Forces all links to open in the same tab instead of new windows/tabs",
+  "description": "Forces all links to open in the same tab instead of new tab or windows",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
   "permissions": [
     "activeTab"
   ],
@@ -12,10 +17,5 @@
       "js": ["content.js"],
       "run_at": "document_end"
     }
-  ],
-  "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
-  }
+  ]
 } 

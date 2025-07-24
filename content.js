@@ -10,10 +10,31 @@
     let isKeyPressed = false;
     let startX, startY;
     let selectionBox = null;
-    let countLabel = null;
     let selectedLinks = [];
     let linkBoxes = new Map(); // Store link selection boxes
     const Z_INDEX = 2147483647;
+    
+    // Styling variables
+    const SELECTION_BOX_STYLE = {
+        width: '2px',
+        style: 'dotted',
+        color: '#5357F6'
+    };
+    
+    const LINK_BOX_STYLE = {
+        width: '2px',
+        style: 'dashed',
+        color: '#00ff00'
+    };
+    
+    const TOAST_STYLE = {
+        background: '#000000',
+        color: 'white',
+        padding: '10px 20px',
+        borderRadius: '5px',
+        fontSize: '14px',
+        maxWidth: '300px'
+    };
 
     // Function to modify existing links
     function modifyLinks() {
@@ -104,43 +125,19 @@
         if (selectionBox) {
             selectionBox.remove();
         }
-        if (countLabel) {
-            countLabel.remove();
-        }
         
         // Create selection box
         selectionBox = document.createElement('span');
         selectionBox.style.cssText = `
             margin: 0px auto;
-            border: 2px dotted #4285f4;
+            border: ${SELECTION_BOX_STYLE.width} ${SELECTION_BOX_STYLE.style} ${SELECTION_BOX_STYLE.color};
             position: absolute;
             z-index: ${Z_INDEX};
             visibility: hidden;
-            pointer-events: none;
-        `;
-        
-        // Create count label
-        countLabel = document.createElement('span');
-        countLabel.style.cssText = `
-            z-index: ${Z_INDEX};
-            position: absolute;
-            visibility: hidden;
-            left: 10px;
-            width: 50px;
-            top: 10px;
-            height: 20px;
-            font-size: 10px;
-            font-family: Arial, sans-serif;
-            color: black;
-            background: white;
-            border: 1px solid #ccc;
-            padding: 2px;
-            text-align: center;
             pointer-events: none;
         `;
         
         document.body.appendChild(selectionBox);
-        document.body.appendChild(countLabel);
     }
 
     // Function to get element position (LinkClump style)
@@ -194,7 +191,7 @@
         const linkBox = document.createElement('span');
         linkBox.style.cssText = `
             margin: 0px auto;
-            border: 2px dashed #ff0000;
+            border: ${LINK_BOX_STYLE.width} ${LINK_BOX_STYLE.style} ${LINK_BOX_STYLE.color};
             position: absolute;
             width: ${width}px;
             height: ${height}px;
@@ -257,13 +254,6 @@
         selectionBox.style.height = (y2 - y1) + 'px';
         selectionBox.style.visibility = 'visible';
         
-        // Update count label position
-        if (countLabel) {
-            countLabel.style.left = (currentX - 15) + 'px';
-            countLabel.style.top = (currentY - 15) + 'px';
-            countLabel.style.visibility = 'visible';
-        }
-        
         // Update link selection indicators
         updateLinkSelection(x1, x2, y1, y2);
     }
@@ -298,11 +288,6 @@
                 }
             }
         });
-        
-        // Update count label
-        if (countLabel) {
-            countLabel.textContent = selectedLinksSet.size;
-        }
         
         // Update selected links array
         selectedLinks = Array.from(selectedLinksSet).map(url => ({ url }));
@@ -414,12 +399,9 @@
                 isKeyPressed = false;
                 document.body.style.cursor = 'default';
                 
-                if (selectionBox) {
-                    selectionBox.style.visibility = 'hidden';
-                }
-                if (countLabel) {
-                    countLabel.style.visibility = 'hidden';
-                }
+                            if (selectionBox) {
+                selectionBox.style.visibility = 'hidden';
+            }
                 
                 // Clean up link boxes
                 cleanupLinkBoxes();
@@ -482,36 +464,39 @@
         const notification = document.createElement('div');
         notification.textContent = message;
         
-        const colors = {
-            success: '#4CAF50',
-            error: '#F44336',
-            info: '#2196F3'
-        };
-        
         notification.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
-            background: ${colors[type] || colors.info};
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+            background: ${TOAST_STYLE.background};
+            color: ${TOAST_STYLE.color};
+            padding: ${TOAST_STYLE.padding};
+            border-radius: ${TOAST_STYLE.borderRadius};
             z-index: 10001;
             font-family: Arial, sans-serif;
-            font-size: 14px;
+            font-size: ${TOAST_STYLE.fontSize};
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            max-width: 300px;
+            max-width: ${TOAST_STYLE.maxWidth};
             word-wrap: break-word;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.1s ease-out, transform 0.1s ease-out;
         `;
         
         document.body.appendChild(notification);
         
-        // Remove notification after 3 seconds
+        // Trigger animation after a brief delay to ensure element is rendered
+        setTimeout(() => {
+            notification.style.opacity = '1';
+            notification.style.transform = 'translateY(0)';
+        }, 10);
+        
+        // Remove notification after 1 second
         setTimeout(() => {
             if (notification.parentNode) {
                 notification.parentNode.removeChild(notification);
             }
-        }, 3000);
+        }, 1000);
     }
 
     // Function to get settings from background script

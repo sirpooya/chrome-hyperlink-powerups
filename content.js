@@ -314,14 +314,22 @@
     // Function to copy links to clipboard
     function copyLinksToClipboard(links) {
         if (links.length === 0) {
-            showNotification('No links found in selection', 'error');
+            // Show Chrome toast for no links found
+            chrome.runtime.sendMessage({
+                action: 'showToast',
+                message: 'No links found in selection'
+            });
             return;
         }
         
         const linkList = links.map(link => link.url).join('\n');
         
         navigator.clipboard.writeText(linkList).then(() => {
-            showNotification(`Copied ${links.length} links to clipboard!`, 'success');
+            // Show Chrome toast for success
+            chrome.runtime.sendMessage({
+                action: 'showToast',
+                message: `Copied ${links.length} links to clipboard!`
+            });
         }).catch(() => {
             // Fallback for older browsers
             const textArea = document.createElement('textarea');
@@ -332,7 +340,12 @@
             textArea.select();
             document.execCommand('copy');
             document.body.removeChild(textArea);
-            showNotification(`Copied ${links.length} links to clipboard!`, 'success');
+            
+            // Show Chrome toast for success
+            chrome.runtime.sendMessage({
+                action: 'showToast',
+                message: `Copied ${links.length} links to clipboard!`
+            });
         });
     }
 
@@ -402,7 +415,6 @@
                 if (!isKeyPressed) {
                     isKeyPressed = true;
                     document.body.style.cursor = 'crosshair';
-                    showNotification('Hold and drag to select links', 'info');
                 }
             }
         });
@@ -565,5 +577,5 @@
         }
     });
 
-    console.log('Same Tab Link Opener: Extension loaded (disabled by default)');
+    console.log('Same Tab Link Ops: Extension loaded (disabled by default)');
 })(); 

@@ -5,7 +5,7 @@
     'use strict';
 
     let isEnabled = false;
-    let settings = { shortcutKey: 'Z' };
+    let settings = { shortcutKey: 'Z', forceSameTab: true };
     let isDragging = false;
     let isKeyPressed = false;
     let startX, startY;
@@ -44,7 +44,7 @@
 
     // Function to modify existing links
     function modifyLinks() {
-        if (!isEnabled) return;
+        if (!isEnabled || !settings.forceSameTab) return;
         
         const links = document.querySelectorAll('a[target]');
         
@@ -71,10 +71,29 @@
         });
     }
 
+    // Function to handle JavaScript window.open calls
+    function interceptWindowOpen() {
+        if (!isEnabled || !settings.forceSameTab) return;
+        
+        // Store original window.open
+        const originalWindowOpen = window.open;
+        
+        // Override window.open
+        window.open = function(url, target, features) {
+            if (url && (target === '_blank' || target === '_new' || !target)) {
+                // Navigate in same tab instead
+                window.location.href = url;
+                return null;
+            }
+            // For other cases, use original window.open
+            return originalWindowOpen.call(this, url, target, features);
+        };
+    }
+
     // Function to handle dynamically added links
     function observeNewLinks() {
         const observer = new MutationObserver(function(mutations) {
-            if (!isEnabled) return;
+            if (!isEnabled || !settings.forceSameTab) return;
             
             mutations.forEach(function(mutation) {
                 if (mutation.type === 'childList') {
@@ -105,7 +124,7 @@
     // Function to handle click events on links that might open new windows
     function handleLinkClicks() {
         document.addEventListener('click', function(e) {
-            if (!isEnabled) return;
+            if (!isEnabled || !settings.forceSameTab) return;
             
             const link = e.target.closest('a');
             
@@ -565,6 +584,16 @@
             
             if (isEnabled) {
                 modifyLinks();
+                interceptWindowOpen(); // Re-apply interceptor if enabled
+            }
+        }
+        
+        if (request.action === 'settingsUpdated') {
+            // Reload settings and re-apply functionality
+            getSettings();
+            if (isEnabled) {
+                modifyLinks();
+                interceptWindowOpen();
             }
         }
     });
@@ -577,6 +606,7 @@
             observeNewLinks();
             handleLinkClicks();
             handleDragSelection();
+            interceptWindowOpen(); // Apply window.open interceptor
         });
     } else {
         // DOM is already loaded
@@ -585,12 +615,14 @@
         observeNewLinks();
         handleLinkClicks();
         handleDragSelection();
+        interceptWindowOpen(); // Apply window.open interceptor
     }
 
     // Also run on window load to catch any late-loading content
     window.addEventListener('load', function() {
         if (isEnabled) {
             modifyLinks();
+            interceptWindowOpen(); // Ensure interceptor is applied on load if enabled
         }
     });
 

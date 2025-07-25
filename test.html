@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyperlink Powerups - Test Page</title>
+    <title>Hyperlink Powerups Test Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,108 +25,111 @@
         a {
             color: #0066cc;
             text-decoration: none;
+            margin: 5px 10px 5px 0;
+            display: inline-block;
         }
         a:hover {
             text-decoration: underline;
         }
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 10px 5px 0;
+        }
+        button:hover {
+            background-color: #0052a3;
+        }
         .status {
-            background-color: #e8f5e8;
+            background-color: #e7f3ff;
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 4px;
             margin-bottom: 20px;
+            border-left: 4px solid #0066cc;
         }
     </style>
 </head>
 <body>
-    <h1>Hyperlink Powerups - Test Page</h1>
+    <h1>Hyperlink Powerups Test Page</h1>
     
     <div class="status">
-        <strong>Extension Status:</strong> 
-        <span id="status">Checking...</span>
-    </div>
-
-    <div class="test-section">
-        <h3>Test 1: Basic Links with target="_blank"</h3>
-        <p>These links normally open in new tabs:</p>
+        <strong>Test Instructions:</strong> 
         <ul>
-            <li><a href="https://www.google.com" target="_blank">Google (target="_blank")</a></li>
-            <li><a href="https://www.github.com" target="_blank">GitHub (target="_blank")</a></li>
-            <li><a href="https://www.stackoverflow.com" target="_blank">Stack Overflow (target="_blank")</a></li>
+            <li>Make sure the extension is enabled (Ctrl+Shift+Z)</li>
+            <li>Click the links below - they should open in the same tab instead of new tabs/windows</li>
+            <li>Click the buttons - they should also open in the same tab</li>
+            <li>Check the browser console for extension messages</li>
         </ul>
     </div>
 
     <div class="test-section">
-        <h3>Test 2: Links with target="_new"</h3>
-        <p>These links normally open in new windows:</p>
-        <ul>
-            <li><a href="https://www.wikipedia.org" target="_new">Wikipedia (target="_new")</a></li>
-            <li><a href="https://www.reddit.com" target="_new">Reddit (target="_new")</a></li>
-        </ul>
+        <h3>1. Links with target="_blank"</h3>
+        <a href="https://www.google.com" target="_blank">Google (target="_blank")</a>
+        <a href="https://www.github.com" target="_blank">GitHub (target="_blank")</a>
+        <a href="https://www.stackoverflow.com" target="_blank">Stack Overflow (target="_blank")</a>
     </div>
 
     <div class="test-section">
-        <h3>Test 3: JavaScript Links</h3>
-        <p>These links use JavaScript to open new windows:</p>
-        <ul>
-            <li><a href="#" onclick="window.open('https://www.youtube.com', '_blank')">YouTube (JavaScript window.open)</a></li>
-            <li><a href="#" onclick="window.open('https://www.twitter.com', '_new')">Twitter (JavaScript window.open)</a></li>
-        </ul>
+        <h3>2. Links with target="_new"</h3>
+        <a href="https://www.wikipedia.org" target="_new">Wikipedia (target="_new")</a>
+        <a href="https://www.reddit.com" target="_new">Reddit (target="_new")</a>
     </div>
 
     <div class="test-section">
-        <h3>Test 4: Normal Links (Control)</h3>
-        <p>These links should work normally (open in same tab):</p>
-        <ul>
-            <li><a href="https://www.example.com">Example.com (normal link)</a></li>
-            <li><a href="https://www.httpbin.org">HTTPBin (normal link)</a></li>
-        </ul>
+        <h3>3. JavaScript window.open() buttons</h3>
+        <button onclick="window.open('https://www.youtube.com', '_blank')">YouTube (window.open with _blank)</button>
+        <button onclick="window.open('https://www.twitter.com', '_new')">Twitter (window.open with _new)</button>
+        <button onclick="window.open('https://www.linkedin.com')">LinkedIn (window.open without target)</button>
     </div>
 
     <div class="test-section">
-        <h3>Test 5: Dynamically Added Links</h3>
-        <p>Click the button to add a new link with target="_blank":</p>
-        <button onclick="addDynamicLink()">Add Dynamic Link</button>
+        <h3>4. Dynamic links (added after page load)</h3>
+        <button onclick="addDynamicLinks()">Add Dynamic Links</button>
         <div id="dynamic-links"></div>
     </div>
 
-    <script>
-        // Check if extension is loaded
-        setTimeout(() => {
-            const status = document.getElementById('status');
-            if (window.location.href.includes('chrome-extension://')) {
-                status.textContent = 'Extension detected!';
-                status.style.color = 'green';
-            } else {
-                status.textContent = 'Extension not detected. Make sure it\'s installed and enabled.';
-                status.style.color = 'red';
-            }
-        }, 1000);
+    <div class="test-section">
+        <h3>5. Link Selection Test</h3>
+        <p>Hold your custom key (default: Z) and drag to select multiple links:</p>
+        <a href="https://www.example1.com" target="_blank">Example 1</a>
+        <a href="https://www.example2.com" target="_blank">Example 2</a>
+        <a href="https://www.example3.com" target="_blank">Example 3</a>
+        <a href="https://www.example4.com" target="_blank">Example 4</a>
+        <a href="https://www.example5.com" target="_blank">Example 5</a>
+    </div>
 
-        // Function to add dynamic links
-        function addDynamicLink() {
+    <script>
+        function addDynamicLinks() {
             const container = document.getElementById('dynamic-links');
-            const link = document.createElement('a');
-            link.href = 'https://www.example.org';
-            link.target = '_blank';
-            link.textContent = 'Dynamically added link (target="_blank")';
-            link.style.display = 'block';
-            link.style.margin = '10px 0';
+            const links = [
+                { url: 'https://www.dynamic1.com', text: 'Dynamic Link 1' },
+                { url: 'https://www.dynamic2.com', text: 'Dynamic Link 2' },
+                { url: 'https://www.dynamic3.com', text: 'Dynamic Link 3' }
+            ];
             
-            container.appendChild(link);
+            links.forEach(link => {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.target = '_blank';
+                a.textContent = link.text;
+                container.appendChild(a);
+            });
+            
+            alert('Dynamic links added! Try clicking them.');
         }
 
-        // Add some dynamic content after page load
-        setTimeout(() => {
-            const container = document.getElementById('dynamic-links');
-            const link = document.createElement('a');
-            link.href = 'https://www.example.net';
-            link.target = '_blank';
-            link.textContent = 'Auto-added link (target="_blank")';
-            link.style.display = 'block';
-            link.style.margin = '10px 0';
-            
-            container.appendChild(link);
-        }, 2000);
+        // Test if extension is loaded
+        console.log('Test page loaded. Extension should be active if enabled.');
+        
+        // Check for extension messages
+        window.addEventListener('message', function(event) {
+            if (event.source === window && event.data.type === 'extension-message') {
+                console.log('Extension message received:', event.data);
+            }
+        });
     </script>
 </body>
 </html> 

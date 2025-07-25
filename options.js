@@ -1,10 +1,12 @@
 // Default settings
 const DEFAULT_SETTINGS = {
-    shortcutKey: 'Z'
+    shortcutKey: 'Z',
+    forceSameTab: true
 };
 
 // DOM elements
 const shortcutKeyInput = document.getElementById('shortcutKey');
+const forceSameTabToggle = document.getElementById('forceSameTab');
 const settingsForm = document.getElementById('settingsForm');
 const statusDiv = document.getElementById('status');
 
@@ -26,6 +28,7 @@ shortcutKeyInput.addEventListener('input', function(e) {
 function loadSettings() {
     chrome.storage.sync.get(DEFAULT_SETTINGS, function(items) {
         shortcutKeyInput.value = items.shortcutKey;
+        forceSameTabToggle.checked = items.forceSameTab;
     });
 }
 
@@ -34,6 +37,7 @@ function saveSettings(e) {
     e.preventDefault();
     
     const shortcutKey = shortcutKeyInput.value.trim().toUpperCase();
+    const forceSameTab = forceSameTabToggle.checked;
     
     // Validate input
     if (!shortcutKey || !/^[A-Z]$/.test(shortcutKey)) {
@@ -43,12 +47,25 @@ function saveSettings(e) {
     
     // Save to Chrome storage
     chrome.storage.sync.set({
-        shortcutKey: shortcutKey
+        shortcutKey: shortcutKey,
+        forceSameTab: forceSameTab
     }, function() {
         if (chrome.runtime.lastError) {
             showStatus('Error saving settings: ' + chrome.runtime.lastError.message, 'error');
         } else {
-            showStatus('Settings saved successfully! You can now use ' + shortcutKey + ' for link selection.', 'success');
+            const statusMessage = `Settings saved successfully! Link forcing is ${forceSameTab ? 'enabled' : 'disabled'}. You can now use ${shortcutKey} for link selection.`;
+            showStatus(statusMessage, 'success');
+            
+            // Notify all tabs about settings change
+            chrome.tabs.query({}, function(tabs) {
+                tabs.forEach(function(tab) {
+                    chrome.tabs.sendMessage(tab.id, {
+                        action: 'settingsUpdated'
+                    }).catch(() => {
+                        // Ignore errors for tabs without content script
+                    });
+                });
+            });
         }
     });
 }

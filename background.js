@@ -1,6 +1,7 @@
 // Default settings
 const DEFAULT_SETTINGS = {
-    shortcutKey: 'Z'
+    shortcutKey: 'Z',
+    forceSameTab: true
 };
 
 // Track if extension is enabled for current tab
@@ -85,9 +86,18 @@ function toggleExtension() {
 // Handle tab updates
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (changeInfo.status === 'complete') {
-        // Reset enabled state for new page
-        isEnabled[tabId] = false;
-        console.log('New page loaded, extension disabled');
+        // Enable extension by default for new pages
+        isEnabled[tabId] = true;
+        console.log('New page loaded, extension enabled by default');
+        
+        // Send message to content script to enable it
+        chrome.tabs.sendMessage(tabId, {
+            action: 'toggleExtension',
+            enabled: true
+        }).catch(() => {
+            // Content script might not be loaded yet, that's okay
+            console.log('Content script not ready yet');
+        });
     }
 });
 

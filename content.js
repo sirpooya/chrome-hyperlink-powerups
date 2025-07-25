@@ -133,7 +133,10 @@
                 const target = link.getAttribute('target');
                 const href = link.getAttribute('href');
                 
-                if (target && (target === '_blank' || target === '_new') && href) {
+                // Don't force same tab if user is holding modifier keys to open in new tab
+                const isModifierPressed = e.ctrlKey || e.metaKey || e.shiftKey;
+                
+                if (target && (target === '_blank' || target === '_new') && href && !isModifierPressed) {
                     e.preventDefault();
                     e.stopPropagation();
                     

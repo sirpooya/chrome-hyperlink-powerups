@@ -2,11 +2,9 @@
   "name": "chrome-hyperlink-powerups",
   "version": "1.0.0",
   "description": "A Chrome extension that forces all links to open in the same tab instead of new windows or tabs",
-  "main": "build.js",
+  "main": "manifest.json",
   "scripts": {
-    "build": "node build.js",
-    "dev": "echo 'Load the extension from the root directory for development'",
-    "dist": "npm run build && echo 'Extension ready in dist/ directory'"
+    "dev": "echo 'Load the extension directly from this directory in Chrome'"
   },
   "keywords": [
     "chrome-extension",
@@ -24,9 +22,5 @@
   "bugs": {
     "url": "https://github.com/yourusername/chrome-hyperlink-powerups/issues"
   },
-  "homepage": "https://github.com/yourusername/chrome-hyperlink-powerups#readme",
-  "devDependencies": {},
-  "engines": {
-    "node": ">=14.0.0"
-  }
+  "homepage": "https://github.com/yourusername/chrome-hyperlink-powerups#readme"
 } 

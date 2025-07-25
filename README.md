@@ -6,7 +6,7 @@ A Chrome extension that forces all links on webpages to open in the same tab ins
 
 - **Same Tab Navigation**: Removes `target="_blank"` and `target="_new"` attributes from all links
 - **Dynamic Content Support**: Handles dynamically added content through MutationObserver
-- **Link Selection**: Select and copy multiple links by dragging your mouse (LinkClump-style)
+- **Link Selection**: Select and copy multiple links by dragging your mouse
 - **Keyboard Shortcuts**: Toggle extension on/off with Ctrl+Shift+Z
 - **Customizable**: Configure your own link selection key
 - **Works on all websites**: Lightweight and efficient
@@ -15,51 +15,36 @@ A Chrome extension that forces all links on webpages to open in the same tab ins
 
 ```
 chrome-hyperlink-powerups/
-├── src/
-│   ├── assets/           # Extension icons
-│   ├── background/       # Background service worker
-│   ├── content/          # Content scripts
-│   ├── options/          # Options page
-│   └── utils/            # Utility functions
-├── dist/                 # Built extension (generated)
-├── manifest.json         # Extension manifest
+├── manifest.json          # Extension configuration
+├── background.js          # Background service worker
+├── content.js            # Content script
+├── options.html          # Options page
+├── options.js            # Options logic
+├── icons/                # Extension icons
+│   ├── icon16.png
+│   ├── icon48.png
+│   └── icon128.png
 ├── package.json          # Project configuration
-├── build.js             # Build script
 └── README.md            # This file
 ```
 
 ## Installation
 
-### Development Setup
+### Simple Setup
 
-1. Clone this repository:
+1. **Clone this repository:**
    ```bash
    git clone https://github.com/yourusername/chrome-hyperlink-powerups.git
    cd chrome-hyperlink-powerups
    ```
 
-2. Install dependencies (if any):
-   ```bash
-   npm install
-   ```
-
-3. Load the extension in Chrome:
+2. **Load the extension in Chrome:**
    - Open Chrome and navigate to `chrome://extensions/`
    - Enable "Developer mode" in the top right corner
-   - Click "Load unpacked" and select the root folder of this project
+   - Click "Load unpacked" and select this project folder
    - The extension will be installed and active
 
-### Production Build
-
-1. Build the extension for distribution:
-   ```bash
-   npm run build
-   ```
-
-2. Load the built extension:
-   - Navigate to `chrome://extensions/`
-   - Enable "Developer mode"
-   - Click "Load unpacked" and select the `dist/` folder
+That's it! No build process needed - the extension works directly from the source files.
 
 ## Usage
 
@@ -85,26 +70,22 @@ Once installed, the extension will automatically:
 
 ## Development
 
-### Available Scripts
-
-- `npm run build`: Build the extension for distribution
-- `npm run dev`: Development mode (load from root directory)
-- `npm run dist`: Build and prepare for distribution
-
 ### File Structure
 
-- **`src/background/`**: Background service worker scripts
-- **`src/content/`**: Content scripts that run on web pages
-- **`src/options/`**: Options page HTML and JavaScript
-- **`src/assets/`**: Extension icons and other assets
-- **`src/utils/`**: Shared utility functions
+- **`manifest.json`**: Extension configuration, permissions, and file references
+- **`background.js`**: Background service worker that manages extension state
+- **`content.js`**: Content script that modifies link behavior and provides link selection
+- **`options.html`**: Options page for user configuration
+- **`options.js`**: Options page functionality
+- **`icons/`**: Extension icons in different sizes
 
-### Building
+### Development Workflow
 
-The build process:
-1. Copies all source files to the `dist/` directory
-2. Updates the manifest.json to use relative paths
-3. Creates a production-ready extension package
+1. **Edit files directly** in the project folder
+2. **Reload the extension** in Chrome when you make changes:
+   - Go to `chrome://extensions/`
+   - Click the refresh icon on your extension
+3. **Test your changes** on any website
 
 ## How It Works
 
@@ -126,7 +107,7 @@ The extension uses multiple components:
 
 To test the extension:
 
-1. Install the extension (development or production build)
+1. Install the extension
 2. Visit any website with links that open in new tabs
 3. Click on those links - they should now open in the same tab
 4. Test the link selection feature by holding your custom key and dragging
@@ -137,7 +118,7 @@ To test the extension:
 - If links still open in new tabs, try refreshing the page
 - Check the browser console for any error messages
 - Ensure the extension is enabled in `chrome://extensions/`
-- Verify that the manifest.json paths are correct for your setup
+- Verify that all files are in the correct locations
 
 ## Permissions
 

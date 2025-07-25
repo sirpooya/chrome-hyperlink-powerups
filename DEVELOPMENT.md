@@ -4,7 +4,6 @@ This guide will help you set up and contribute to the Hyperlink Powerups Chrome 
 
 ## Prerequisites
 
-- Node.js (version 14 or higher)
 - Google Chrome browser
 - Git
 
@@ -16,51 +15,37 @@ This guide will help you set up and contribute to the Hyperlink Powerups Chrome 
    cd chrome-hyperlink-powerups
    ```
 
-2. **Install dependencies** (if any are added in the future)
-   ```bash
-   npm install
-   ```
+2. **Load the extension in Chrome:**
+   - Open Chrome and go to `chrome://extensions/`
+   - Enable "Developer mode"
+   - Click "Load unpacked" and select this project folder
+   - The extension will be loaded and ready for testing
 
 ## Development Workflow
 
-### For Development
+### Making Changes
 
-1. **Load the extension in Chrome for development:**
-   - Open Chrome and go to `chrome://extensions/`
-   - Enable "Developer mode"
-   - Click "Load unpacked" and select the root directory of this project
-   - The extension will be loaded and ready for testing
-
-2. **Make changes to the source files:**
-   - Edit files in the `src/` directory
-   - The extension will automatically reload when you refresh the page
-
-3. **Test your changes:**
-   - Visit websites with links that open in new tabs
-   - Test the link selection feature
-   - Check the browser console for any errors
-
-### For Production
-
-1. **Build the extension:**
-   ```bash
-   npm run build
-   ```
-
-2. **Load the built extension:**
+1. **Edit files directly** in the project folder
+2. **Reload the extension** when you make changes:
    - Go to `chrome://extensions/`
-   - Enable "Developer mode"
-   - Click "Load unpacked" and select the `dist/` folder
+   - Click the refresh icon on your extension
+3. **Test your changes** on any website
 
 ## Project Structure
 
 ```
-src/
-├── assets/           # Extension icons (PNG files)
-├── background/       # Background service worker scripts
-├── content/          # Content scripts that run on web pages
-├── options/          # Options page (HTML, CSS, JS)
-└── utils/            # Shared utility functions (future use)
+chrome-hyperlink-powerups/
+├── manifest.json          # Extension configuration
+├── background.js          # Background service worker
+├── content.js            # Content script
+├── options.html          # Options page
+├── options.js            # Options logic
+├── icons/                # Extension icons
+│   ├── icon16.png
+│   ├── icon48.png
+│   └── icon128.png
+├── package.json          # Project configuration
+└── README.md            # Documentation
 ```
 
 ## File Descriptions
@@ -68,22 +53,11 @@ src/
 ### Core Files
 
 - **`manifest.json`**: Extension configuration, permissions, and file references
-- **`src/background/background.js`**: Background service worker that manages extension state
-- **`src/content/content.js`**: Content script that modifies link behavior and provides link selection
-- **`src/options/options.html`**: Options page for user configuration
-- **`src/options/options.js`**: Options page functionality
-
-### Build Files
-
-- **`build.js`**: Build script that copies files to `dist/` and updates paths
-- **`package.json`**: Project configuration and scripts
-- **`dist/`**: Generated directory containing the built extension
-
-## Available Scripts
-
-- `npm run build`: Build the extension for distribution
-- `npm run dev`: Development mode instructions
-- `npm run dist`: Build and prepare for distribution
+- **`background.js`**: Background service worker that manages extension state
+- **`content.js`**: Content script that modifies link behavior and provides link selection
+- **`options.html`**: Options page for user configuration
+- **`options.js`**: Options page functionality
+- **`icons/`**: Extension icons in different sizes
 
 ## Testing
 
@@ -132,7 +106,7 @@ src/
    - Test thoroughly
 
 3. **Test your changes:**
-   - Load the extension in Chrome
+   - Reload the extension in Chrome
    - Test all functionality
    - Check for any console errors
 
@@ -161,29 +135,19 @@ src/
 - Check if the content script is running
 - Verify the extension is enabled
 
-### Build errors
-- Ensure Node.js is installed
-- Check that all source files exist
-- Verify file permissions
-
 ## Release Process
 
 1. **Update version numbers:**
    - Update version in `manifest.json`
    - Update version in `package.json`
 
-2. **Build the extension:**
-   ```bash
-   npm run build
-   ```
-
-3. **Test the built extension:**
-   - Load from `dist/` directory
+2. **Test the extension:**
+   - Load from the project directory
    - Test all functionality
 
-4. **Create a release:**
+3. **Create a release:**
    - Tag the release in Git
-   - Upload the `dist/` folder as a release asset
+   - Upload the project folder as a release asset
 
 ## Support
 

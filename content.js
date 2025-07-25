@@ -559,11 +559,12 @@
     }
 
     // Function to get settings from background script
-    function getSettings() {
+    function getSettings(callback) {
         chrome.runtime.sendMessage({ action: 'getSettings' }, function(response) {
             if (response) {
                 settings = response;
             }
+            if (callback) callback();
         });
     }
 
@@ -580,47 +581,58 @@
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if (request.action === 'toggleExtension') {
             isEnabled = request.enabled;
-            showNotification(isEnabled ? 'Extension Enabled' : 'Extension Disabled');
             
             if (isEnabled) {
-                modifyLinks();
-                interceptWindowOpen(); // Re-apply interceptor if enabled
+                // Make sure settings are loaded before applying functionality
+                if (settings.forceSameTab !== undefined) {
+                    modifyLinks();
+                    interceptWindowOpen(); // Re-apply interceptor if enabled
+                } else {
+                    // If settings aren't loaded yet, wait for them
+                    getSettings(function() {
+                        modifyLinks();
+                        interceptWindowOpen();
+                    });
+                }
             }
         }
         
         if (request.action === 'settingsUpdated') {
             // Reload settings and re-apply functionality
-            getSettings();
-            if (isEnabled) {
-                modifyLinks();
-                interceptWindowOpen();
-            }
+            getSettings(function() {
+                if (isEnabled) {
+                    modifyLinks();
+                    interceptWindowOpen();
+                }
+            });
         }
     });
 
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
-            getSettings();
+            getSettings(function() {
+                checkEnabledState();
+                observeNewLinks();
+                handleLinkClicks();
+                handleDragSelection();
+                interceptWindowOpen(); // Apply window.open interceptor
+            });
+        });
+    } else {
+        // DOM is already loaded
+        getSettings(function() {
             checkEnabledState();
             observeNewLinks();
             handleLinkClicks();
             handleDragSelection();
             interceptWindowOpen(); // Apply window.open interceptor
         });
-    } else {
-        // DOM is already loaded
-        getSettings();
-        checkEnabledState();
-        observeNewLinks();
-        handleLinkClicks();
-        handleDragSelection();
-        interceptWindowOpen(); // Apply window.open interceptor
     }
 
     // Also run on window load to catch any late-loading content
     window.addEventListener('load', function() {
-        if (isEnabled) {
+        if (isEnabled && settings.forceSameTab !== undefined) {
             modifyLinks();
             interceptWindowOpen(); // Ensure interceptor is applied on load if enabled
         }

@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', loadSettings);
 // Handle form submission
 settingsForm.addEventListener('submit', saveSettings);
 
+
+
 // Handle input validation
 shortcutKeyInput.addEventListener('input', function(e) {
     // Only allow letters A-Z

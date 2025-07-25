@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Hyperlink Powerups",
   "version": "1.0",
-  "description": "Forces all links to open in the same tab instead of new tab or windows",
+  "description": "Forces all links to open in the same tab. Also lets you select and copy multiple links to the clipboard using a shortcut and drag",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",

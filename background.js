@@ -10,35 +10,7 @@ let isEnabled = {};
 // Initialize when extension loads
 chrome.runtime.onInstalled.addListener(() => {
     console.log('Hyperlink Powerups extension installed');
-    initializeCommands();
 });
-
-// Function to initialize commands with retry logic
-function initializeCommands() {
-    // Wait a bit for the API to be available
-    setTimeout(() => {
-        try {
-            // Check if commands API exists and is properly loaded
-            if (typeof chrome !== 'undefined' && 
-                chrome.commands && 
-                typeof chrome.commands.onCommand !== 'undefined') {
-                
-                chrome.commands.onCommand.addListener((command) => {
-                    if (command === 'toggle-extension') {
-                        toggleExtension();
-                    }
-                });
-                console.log('Commands API initialized successfully');
-            } else {
-                console.log('Commands API not available, retrying...');
-                // Retry once more after a longer delay
-                setTimeout(initializeCommands, 1000);
-            }
-        } catch (error) {
-            console.log('Error initializing commands API:', error);
-        }
-    }, 100);
-}
 
 // Listen for messages from content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -62,26 +34,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
-// Toggle extension for current active tab
-function toggleExtension() {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-        if (tabs[0]) {
-            const tabId = tabs[0].id;
-            isEnabled[tabId] = !isEnabled[tabId];
-            
-            // Send message to content script
-            chrome.tabs.sendMessage(tabId, {
-                action: 'toggleExtension',
-                enabled: isEnabled[tabId]
-            }).catch(() => {
-                // Content script might not be loaded yet, that's okay
-                console.log('Content script not ready yet');
-            });
-            
-            console.log('Extension toggled:', isEnabled[tabId] ? 'ON' : 'OFF');
-        }
-    });
-}
+
 
 // Handle tab updates
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {

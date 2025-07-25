@@ -579,24 +579,6 @@
 
     // Listen for messages from background script
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.action === 'toggleExtension') {
-            isEnabled = request.enabled;
-            
-            if (isEnabled) {
-                // Make sure settings are loaded before applying functionality
-                if (settings.forceSameTab !== undefined) {
-                    modifyLinks();
-                    interceptWindowOpen(); // Re-apply interceptor if enabled
-                } else {
-                    // If settings aren't loaded yet, wait for them
-                    getSettings(function() {
-                        modifyLinks();
-                        interceptWindowOpen();
-                    });
-                }
-            }
-        }
-        
         if (request.action === 'settingsUpdated') {
             // Reload settings and re-apply functionality
             getSettings(function() {

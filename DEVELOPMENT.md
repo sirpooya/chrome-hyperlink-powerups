@@ -73,9 +73,9 @@ chrome-hyperlink-powerups/
    - Hold the key and drag to select multiple links
    - Verify links are copied to clipboard
 
-3. **Keyboard shortcuts:**
-   - Press Ctrl+Shift+Z to toggle extension
-   - Verify toggle functionality works
+3. **Settings toggle:**
+   - Open extension options and toggle the "Force links to open in same tab" switch
+   - Verify the setting applies immediately across all tabs
 
 ### Debugging
 

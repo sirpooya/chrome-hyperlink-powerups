@@ -7,7 +7,7 @@ A Chrome extension that forces all links on webpages to open in the same tab ins
 - **Same Tab Navigation**: Removes `target="_blank"` and `target="_new"` attributes from all links
 - **Dynamic Content Support**: Handles dynamically added content through MutationObserver
 - **Link Selection**: Select and copy multiple links by dragging your mouse
-- **Keyboard Shortcuts**: Toggle extension on/off with Ctrl+Shift+Z
+
 - **Customizable**: Configure your own link selection key
 - **Works on all websites**: Lightweight and efficient
 
@@ -63,9 +63,8 @@ Once installed, the extension will automatically:
 4. Click and drag to create a selection box
 5. Release to copy all links in the selected area to clipboard
 
-### Keyboard Shortcuts
+### Link Selection
 
-- **Ctrl+Shift+Z**: Toggle extension on/off for the current page
 - **Custom Key + Drag**: Select and copy multiple links
 
 ## Development

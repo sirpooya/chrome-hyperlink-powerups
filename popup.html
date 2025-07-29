@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            width: 300px;
+            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            background: #f8f9fa;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        
+        .header img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+        
+        .setting-group {
+            margin-bottom: 16px;
+        }
+        
+        .setting-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4a4a4a;
+            margin-bottom: 6px;
+        }
+        
+        .shortcut-input {
+            width: 40px;
+            height: 32px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            background: white;
+            color: #1a1a1a;
+        }
+        
+        .shortcut-input:focus {
+            outline: none;
+            border-color: #0061CA;
+            box-shadow: 0 0 0 2px rgba(0, 97, 202, 0.1);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.2s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.2s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #0061CA;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .toggle-text {
+            font-size: 13px;
+            color: #4a4a4a;
+            flex: 1;
+            margin-right: 12px;
+        }
+        
+        .status {
+            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            display: none;
+        }
+        
+        .status.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .status.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        
+        .footer {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #e1e5e9;
+            text-align: center;
+        }
+        
+        .footer a {
+            color: #0061CA;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .description {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="icons/icon16.png" alt="Extension Icon">
+        <h1>Hyperlink Powerups</h1>
+    </div>
+    
+    <div class="setting-group">
+        <label class="setting-label">Shortcut Key</label>
+        <input type="text" id="shortcutKey" class="shortcut-input" maxlength="1" placeholder="Z">
+        <div class="description">Hold this key and drag to select multiple links</div>
+    </div>
+    
+    <div class="setting-group">
+        <div class="toggle-container">
+            <div class="toggle-text">Force same tab</div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="forceSameTab">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="description">Forces links to open in same tab (Cmd+click still opens in new tab)</div>
+    </div>
+    
+    <div id="status" class="status"></div>
+    
+    <div class="footer">
+        <a href="#" id="openOptions">Open full options</a>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html> 

@@ -16,6 +16,10 @@
     "service_worker": "background.js"
   },
   "options_page": "options.html",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Hyperlink Powerups"
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
